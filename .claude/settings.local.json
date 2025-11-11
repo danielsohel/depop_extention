@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:www.searchapi.io)",
+      "WebFetch(domain:openrouter.ai)",
+      "WebFetch(domain:www.datacamp.com)",
+      "WebFetch(domain:www.photoroom.com)",
+      "WebFetch(domain:docs.photoroom.com)",
+      "WebFetch(domain:replicate.com)",
+      "WebFetch(domain:magichour.ai)",
+      "WebFetch(domain:fluxai.pro)",
+      "Bash(python:*)",
+      "WebFetch(domain:stackoverflow.com)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

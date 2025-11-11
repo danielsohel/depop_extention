@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Shein Scraper Settings</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Shein Product Scraper</h1>
+
+    <div class="api-section">
+      <h3>OpenRouter API Configuration</h3>
+      <div class="api-input-group">
+        <input type="password" id="api-key-input" placeholder="Enter your OpenRouter API key" />
+        <button id="save-api-key" class="btn-save">Save</button>
+      </div>
+      <div id="api-status" class="api-status"></div>
+      <p class="help-text">Get your API key from <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a></p>
+    </div>
+
+    <div class="api-section">
+      <h3>Replicate API Configuration (Optional)</h3>
+      <div class="api-input-group">
+        <input type="password" id="replicate-api-key-input" placeholder="Enter your Replicate API key" />
+        <button id="save-replicate-key" class="btn-save">Save</button>
+      </div>
+      <div id="replicate-status" class="api-status"></div>
+      <p class="help-text">Get your API key from <a href="https://replicate.com/account/api-tokens" target="_blank">replicate.com/account</a></p>
+
+      <div class="transformation-options" style="margin-top: 15px;">
+        <div id="transformation-settings" style="margin-top: 10px;">
+          <label class="checkbox-label">
+            <input type="checkbox" id="convert-flat-lay" checked />
+            <span>Convert to flat-lay if on model</span>
+          </label>
+
+          <label class="checkbox-label">
+            <input type="checkbox" id="add-bed-scene" checked />
+            <span>Add bed scene staging</span>
+          </label>
+
+          <div style="margin-top: 15px;">
+            <label for="flux-prompt" style="display: block; margin-bottom: 5px; font-weight: bold;">FLUX Transformation Prompt:</label>
+            <textarea id="flux-prompt" style="width: 100%; height: 100px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; font-family: inherit;" placeholder="Keep the clothing item exactly as it is without any changes. Place it on a soft, unmade white bed with natural wrinkles in the sheets. Add natural warm daylight from a window, realistic shadows and folds. Casual phone photo aesthetic. Only change the background and staging, preserve the clothing completely."></textarea>
+            <button id="save-flux-prompt" class="btn-save" style="margin-top: 5px;">Save Prompt</button>
+            <div id="flux-prompt-status" class="api-status" style="margin-top: 5px;"></div>
+          </div>
+
+          <div style="margin-top: 15px;">
+            <label for="default-card-text" style="display: block; margin-bottom: 5px; font-weight: bold;">Default Card Text:</label>
+            <input type="text" id="default-card-text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px;" placeholder="@yourshop on depop" />
+            <button id="save-card-text" class="btn-save" style="margin-top: 5px;">Save Card Text</button>
+            <div id="card-text-status" class="api-status" style="margin-top: 5px;"></div>
+            <p class="help-text" style="margin-top: 5px;">This text will appear on the handwritten card in transformed images</p>
+          </div>
+
+          <div style="margin-top: 15px;">
+            <label for="default-shipping-price" style="display: block; margin-bottom: 5px; font-weight: bold;">Default Shipping Price ($):</label>
+            <input type="number" id="default-shipping-price" step="0.01" min="0" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px;" placeholder="2.00" />
+            <button id="save-shipping-price" class="btn-save" style="margin-top: 5px;">Save Shipping Price</button>
+            <div id="shipping-price-status" class="api-status" style="margin-top: 5px;"></div>
+            <p class="help-text" style="margin-top: 5px;">This shipping price will be auto-filled in Depop listings</p>
+          </div>
+
+          <div style="margin-top: 15px;">
+            <label for="default-brand" style="display: block; margin-bottom: 5px; font-weight: bold;">Default Brand:</label>
+            <input type="text" id="default-brand" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px;" placeholder="Other" />
+            <button id="save-brand" class="btn-save" style="margin-top: 5px;">Save Brand</button>
+            <div id="brand-status" class="api-status" style="margin-top: 5px;"></div>
+            <p class="help-text" style="margin-top: 5px;">This brand will be auto-filled in Depop listings</p>
+          </div>
+
+          <div style="margin-top: 15px;">
+            <label for="default-premade-description">Default Premade Description:</label>
+            <textarea id="default-premade-description" rows="3" placeholder="Enter text to append after AI description (e.g., 'Check our shop for more styles!')"></textarea>
+            <button id="save-premade-description" class="btn-save">Save Premade Description</button>
+            <div id="premade-description-status" class="api-status" style="margin-top: 5px;"></div>
+            <p class="help-text" style="margin-top: 5px;">This text will be added after AI descriptions in all products</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-section" id="scrape-section">
+      <h3>Scrape Current Page</h3>
+      <button id="scrape-btn" class="primary-btn">Scrape Product</button>
+      <div id="scrape-status"></div>
+    </div>
+
+    <div class="depop-section" id="depop-section" style="display: none;">
+      <h3>📦 Published Products for Depop</h3>
+      <div id="published-products-list" class="products-list">
+        <!-- Products will be dynamically inserted here -->
+      </div>
+      <div id="no-products-message" style="text-align: center; padding: 20px; color: #666; display: none;">
+        No published products yet. Scrape a product and click "Publish to Depop" to add one.
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>How to Use</h3>
+      <ol>
+        <li>Configure your OpenRouter API key for AI descriptions</li>
+        <li>Optional: Add Replicate API key for image transformation</li>
+        <li>Navigate to a Shein, AliExpress, or Grailed product page</li>
+        <li>Click "Scrape Product"</li>
+        <li>AI will generate enhanced description with hashtags</li>
+        <li>Transform images manually with custom FLUX prompt</li>
+        <li>Publish products to Depop for easy listing</li>
+      </ol>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

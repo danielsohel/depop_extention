@@ -1,0 +1,62 @@
+{
+  "manifest_version": 3,
+  "name": "Shein, AliExpress & Grailed Product Scraper",
+  "version": "1.5.0",
+  "description": "Scrape Shein, AliExpress and Grailed products with AI-powered data extraction and FLUX.1 image transformation",
+  "permissions": [
+    "activeTab",
+    "downloads",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://*.shein.com/*",
+    "https://us.shein.com/*",
+    "https://*.aliexpress.com/*",
+    "https://www.aliexpress.com/*",
+    "https://*.aliexpress.us/*",
+    "https://www.aliexpress.us/*",
+    "https://*.grailed.com/*",
+    "https://www.grailed.com/*",
+    "https://*.depop.com/*",
+    "https://www.depop.com/*",
+    "https://api.openrouter.ai/*",
+    "https://api.replicate.com/*",
+    "https://vision.googleapis.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.shein.com/*",
+        "https://*.aliexpress.com/*",
+        "https://*.aliexpress.us/*",
+        "https://*.grailed.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://www.depop.com/products/create/*"
+      ],
+      "js": ["depop-filler.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "salary.png",
+      "48": "salary.png",
+      "128": "salary.png"
+    }
+  },
+  "icons": {
+    "16": "salary.png",
+    "48": "salary.png",
+    "128": "salary.png"
+  }
+}

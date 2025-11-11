@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Scrape Results - Shein Product</title>
+  <link rel="stylesheet" href="results.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Shein Product Scrape Results</h1>
+      <div class="header-info">
+        <p id="product-name" class="product-name">Loading...</p>
+        <p id="scrape-time" class="scrape-time"></p>
+      </div>
+    </header>
+
+    <div class="actions-bar">
+      <button id="download-product-complete" class="btn btn-primary">📦 Download Complete Product</button>
+      <button id="download-all-images" class="btn btn-primary">📥 Download All Images</button>
+      <button id="download-transformed-images" class="btn btn-primary" style="display: none;">✨ Download Transformed Images</button>
+      <button id="download-json" class="btn btn-secondary">📄 Download JSON Data</button>
+      <button id="order-management-btn" class="btn btn-secondary">📦 Order Management</button>
+      <button id="publish-to-depop-btn" class="btn btn-primary">🚀 Publish to Depop</button>
+    </div>
+
+    <div id="ai-warning" class="ai-warning" style="display: none;">
+      ⚠️ AI enhancement failed. Showing original scraped data.
+      <span id="ai-warning-message"></span>
+    </div>
+
+    <div id="transformation-status" class="transformation-status" style="display: none;">
+      <h3>🎨 Image Transformation Status</h3>
+      <div id="transformation-info">
+        <!-- Will show transformation details -->
+      </div>
+      <div id="transformation-toggles">
+        <!-- Will show toggle between original/transformed -->
+      </div>
+    </div>
+
+    <section class="ai-description-section">
+      <h2>
+        <span id="ai-badge" class="ai-badge">✨ AI Enhanced</span> Product Description
+      </h2>
+      <div class="editable-description-container">
+        <textarea id="ai-description" class="ai-description editable-description" rows="4" placeholder="AI-generated description will appear here..."></textarea>
+        <button id="save-description-btn" class="btn btn-small">💾 Save Description</button>
+      </div>
+      <div class="editable-description-container" style="margin-top: 15px;">
+        <label for="premade-description" style="display: block; margin-bottom: 5px; font-weight: bold;">Premade Text (appended to description):</label>
+        <textarea id="premade-description" class="ai-description editable-description" rows="2" placeholder="Enter custom text to append after AI description..."></textarea>
+        <button id="save-premade-btn" class="btn btn-small">💾 Save Premade Text</button>
+      </div>
+      <div id="ai-hashtags" class="ai-hashtags">
+        <!-- Hashtags will be inserted here -->
+      </div>
+      <div id="ai-keywords" class="ai-keywords">
+        <!-- Keywords will be inserted here -->
+      </div>
+    </section>
+
+    <section class="category-section">
+      <h2>
+        <span class="ai-badge">🏷️ AI Selected</span> Category
+      </h2>
+      <div class="category-container">
+        <select id="category-select" class="category-select">
+          <option value="">Loading categories...</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="category-section" id="subcategory-group" style="display: none;">
+      <h2>
+        <span class="ai-badge">🏷️ AI Selected</span> Subcategory
+      </h2>
+      <div class="category-container">
+        <select id="subcategory-select" class="category-select">
+          <option value="">Select subcategory...</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="pricing-section">
+      <h2>Pricing (Tiered)</h2>
+      <div class="pricing-container">
+        <div class="price-row">
+          <span class="price-label">Original Price:</span>
+          <span id="original-price" class="price-value">-</span>
+        </div>
+        <div class="price-row calculated">
+          <span class="price-label">Your Price:</span>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 20px; font-weight: bold;">$</span>
+            <input type="number" id="calculated-price-input" class="price-input" step="0.01" min="0" placeholder="0.00" />
+            <span id="price-multiplier" class="price-multiplier" style="color: #666; font-size: 14px;"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="add-image-section">
+      <h2>➕ Add Custom Image</h2>
+      <div class="add-image-container">
+        <input type="text" id="custom-image-url" class="custom-image-input" placeholder="Paste image URL here...">
+        <button id="add-image-btn" class="btn btn-primary">Add Image</button>
+      </div>
+    </section>
+
+    <section class="images-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Product Images (<span id="image-count">0</span>)</h2>
+        <div>
+          <button id="transform-all-images-btn" class="btn btn-primary">
+            🎨 Transform All Images
+          </button>
+          <button id="transform-remaining-btn" class="btn btn-primary" style="display: none;">
+            ✨ Transform Remaining Images
+          </button>
+        </div>
+      </div>
+      <div id="images-grid" class="images-grid">
+        <!-- Images will be dynamically inserted here -->
+      </div>
+    </section>
+
+    <section class="data-section">
+      <h2>Additional Product Details</h2>
+      <div class="data-controls">
+        <button id="toggle-json" class="btn btn-small">Toggle Raw JSON</button>
+        <button id="copy-json" class="btn btn-small">Copy JSON</button>
+      </div>
+
+      <div id="formatted-data" class="formatted-data">
+        <!-- Formatted data will be inserted here -->
+      </div>
+
+      <div id="raw-json" class="raw-json" style="display: none;">
+        <pre><code id="json-code"></code></pre>
+      </div>
+    </section>
+
+    <section class="ocr-section">
+      <h2>OCR Extracted Text</h2>
+      <div class="ocr-controls">
+        <button id="toggle-ocr" class="btn btn-small">Show/Hide OCR Text</button>
+        <button id="copy-ocr" class="btn btn-small">Copy Text</button>
+      </div>
+      <div id="ocr-text" class="ocr-text" style="display: none;">
+        <!-- OCR text will be inserted here -->
+      </div>
+    </section>
+  </div>
+
+  <!-- Remix Modal Dialog -->
+  <div id="remix-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>✨ Remix Image with FLUX</h2>
+        <button class="modal-close" id="close-remix-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="remix-preview">
+          <img id="remix-preview-image" src="" alt="Image to remix" />
+        </div>
+
+        <div class="form-group">
+          <label for="preset-selector">Choose a Preset Prompt:</label>
+          <select id="preset-selector" class="form-control">
+            <option value="">-- Select a preset --</option>
+            <option value="bed">Bed Scene</option>
+            <option value="marble">Marble Surface</option>
+            <option value="remove_bed">Remove Person - Bed</option>
+            <option value="remove_marble">Remove Person - Marble</option>
+            <option value="custom">Custom Prompt</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="remix-prompt">Custom Prompt:</label>
+          <textarea id="remix-prompt" class="form-control" rows="5" placeholder="Enter your custom transformation prompt..."></textarea>
+          <p class="help-text">Describe how you want FLUX to transform this image</p>
+        </div>
+
+        <div class="modal-footer">
+          <button id="cancel-remix" class="btn btn-secondary">Cancel</button>
+          <button id="execute-remix" class="btn btn-primary">
+            ✨ Remix with FLUX
+          </button>
+        </div>
+
+        <div id="remix-progress" class="remix-progress" style="display: none;">
+          <div class="spinner"></div>
+          <p id="remix-status-text">Remixing image with FLUX...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading scrape results...</p>
+  </div>
+
+  <!-- Load JSZip library locally (bundled with extension) -->
+  <script src="jszip.min.js"></script>
+  <script src="results.js"></script>
+</body>
+</html>
